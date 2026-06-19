@@ -4,8 +4,8 @@ services:
     runtime: node
     plan: free
     rootDir: .
-    buildCommand: npm install && npm run build --workspace=packages/shared && npm run build --workspace=backend
-    startCommand: npm run start --workspace=backend
+    buildCommand: npm install --include=dev && npm run build --prefix packages/shared && npm run build --prefix backend
+    startCommand: npm run start --prefix backend
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV

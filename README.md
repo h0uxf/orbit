@@ -41,8 +41,8 @@ Fill in `backend/.env`:
 Then run migrations and seed the catalog (resolves Spotify track URIs via Search):
 
 ```bash
-npm run db:generate --workspace=backend   # generates SQL from schema.ts (first time / after schema changes)
-npm run db:migrate --workspace=backend
+npm run db:generate --prefix backend   # generates SQL from schema.ts (first time / after schema changes)
+npm run db:migrate --prefix backend
 npm run seed
 ```
 
@@ -70,7 +70,7 @@ Use the included `render.yaml` (Render Blueprint) — it provisions the web serv
 - `TOKEN_ENCRYPTION_KEY` — 32-byte hex/base64 key (see above)
 - `OPENAI_API_KEY` — unused today; placeholder for the future-AI seam in `packages/shared/src/djScript.ts`
 
-Run `npm run db:migrate --workspace=backend` and `npm run seed` once against the production `DATABASE_URL` (e.g. via Render's shell) before first use.
+Run `npm run db:migrate --prefix backend` and `npm run seed` once against the production `DATABASE_URL` (e.g. via Render's shell) before first use.
 
 Remember to update the Redirect URI in your Spotify app dashboard to match the production callback URL.
 
