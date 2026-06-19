@@ -95,6 +95,24 @@ export async function searchTrack(accessToken: string, title: string, artist: st
   return data.tracks.items[0] ?? null;
 }
 
+export interface SpotifyTopArtist {
+  id: string;
+  name: string;
+  images: { url: string }[];
+}
+
+// Top Artists/Tracks remain available even though Recommendations / Audio
+// Features / Related Artists were deprecated for new apps — used to seed
+// onboarding's "pick what you love" step from the user's real history.
+export async function fetchTopArtists(accessToken: string, limit = 20): Promise<SpotifyTopArtist[]> {
+  const res = await fetch(`${API_BASE}/me/top/artists?limit=${limit}&time_range=medium_term`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!res.ok) throw new Error(`Spotify top artists fetch failed: ${res.status}`);
+  const data = (await res.json()) as { items: SpotifyTopArtist[] };
+  return data.items;
+}
+
 export async function fetchClientCredentialsToken(): Promise<string> {
   const res = await fetch(TOKEN_URL, {
     method: 'POST',

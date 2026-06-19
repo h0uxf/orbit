@@ -63,6 +63,12 @@ export interface UserState {
   currentTrackId: string | null;
 }
 
+export interface TopArtist {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+}
+
 export type ChatRole = 'me' | 'dj';
 
 export interface ChatMessage {

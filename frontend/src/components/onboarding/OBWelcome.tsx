@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '../atoms';
 
 export function OBWelcome({ onNext }: { onNext: () => void }) {
+  const navigate = useNavigate();
   return (
     <div className="fade-in" style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', padding: '0 28px 32px' }}>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -42,7 +44,7 @@ export function OBWelcome({ onNext }: { onNext: () => void }) {
         <button className="btn btn-primary" style={{ width: '100%' }} onClick={onNext}>
           Begin <Icon name="arrow" size={16} />
         </button>
-        <button className="btn btn-ghost" style={{ width: '100%', marginTop: 8 }}>
+        <button className="btn btn-ghost" style={{ width: '100%', marginTop: 8 }} onClick={() => navigate('/login')}>
           I already have an account
         </button>
       </div>

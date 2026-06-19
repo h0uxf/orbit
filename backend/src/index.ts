@@ -6,6 +6,7 @@ import { authRouter } from './routes/auth.routes.js';
 import { stationsRouter } from './routes/stations.routes.js';
 import { stateRouter } from './routes/state.routes.js';
 import { djRouter } from './routes/dj.routes.js';
+import { meRouter } from './routes/me.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/stations', stationsRouter);
 app.use('/api/state', stateRouter);
 app.use('/api/dj', djRouter);
+app.use('/api/me', meRouter);
 
 app.use(errorHandler);
 

@@ -14,9 +14,10 @@ interface SettingsSheetProps {
   autoAdvance: boolean;
   setAutoAdvance: (v: boolean) => void;
   onResetOnboarding: () => void;
+  onOpenAccount: () => void;
 }
 
-export function SettingsSheet({ open, onClose, personas, persona, setPersona, sleep, setSleep, autoAdvance, setAutoAdvance, onResetOnboarding }: SettingsSheetProps) {
+export function SettingsSheet({ open, onClose, personas, persona, setPersona, sleep, setSleep, autoAdvance, setAutoAdvance, onResetOnboarding, onOpenAccount }: SettingsSheetProps) {
   return (
     <Sheet open={open} onClose={onClose} title="Studio" height="76%" sub="Shape who's on air and how the night runs">
       <div className="h-section" style={{ marginBottom: 12 }}>Your DJ</div>
@@ -65,7 +66,11 @@ export function SettingsSheet({ open, onClose, personas, persona, setPersona, sl
         <ToggleRow icon="play" label="Auto-advance" sub="Roll into a neighbouring station when a track ends" value={autoAdvance} onChange={setAutoAdvance} />
       </div>
 
-      <button onClick={onResetOnboarding} className="btn" style={{ width: '100%', marginTop: 20, fontSize: 13 }}>
+      <div className="h-section" style={{ margin: '24px 0 12px' }}>Account</div>
+      <button onClick={onOpenAccount} className="btn" style={{ width: '100%', fontSize: 13 }}>
+        Account
+      </button>
+      <button onClick={onResetOnboarding} className="btn" style={{ width: '100%', marginTop: 10, fontSize: 13 }}>
         Replay onboarding
       </button>
     </Sheet>

@@ -6,8 +6,14 @@ import { OBPick } from './OBPick';
 import { OBScan } from './OBScan';
 import { OBDone } from './OBDone';
 
-export function Onboarding({ onComplete }: { onComplete: (picks: string[]) => void }) {
-  const [step, setStep] = useState(0); // 0 welcome, 1 connect, 2 pick, 3 scanning, 4 done
+interface OnboardingProps {
+  onComplete: (picks: string[]) => void;
+  /** Skip ahead when the user arrives already authenticated (e.g. resuming after the Spotify redirect). */
+  initialStep?: number;
+}
+
+export function Onboarding({ onComplete, initialStep = 0 }: OnboardingProps) {
+  const [step, setStep] = useState(initialStep); // 0 welcome, 1 connect, 2 pick, 3 scanning, 4 done
   const [scanPct, setScanPct] = useState(0);
   const [picks, setPicks] = useState<string[]>([]);
 
@@ -41,7 +47,7 @@ export function Onboarding({ onComplete }: { onComplete: (picks: string[]) => vo
       <StatusBar />
       <div className="ob-stagewrap" style={{ flex: 1, position: 'relative', overflow: 'hidden', width: '100%' }}>
         {step === 0 && <OBWelcome key="w" onNext={() => setStep(1)} />}
-        {step === 1 && <OBConnect key="c" onNext={() => setStep(2)} onBack={() => setStep(0)} />}
+        {step === 1 && <OBConnect key="c" onBack={() => setStep(0)} />}
         {step === 2 && <OBPick key="p" picks={picks} setPicks={setPicks} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
         {step === 3 && <OBScan key="s" pct={scanPct} />}
         {step === 4 && <OBDone key="d" picks={picks} onEnter={() => onComplete(picks)} />}

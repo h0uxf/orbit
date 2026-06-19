@@ -7,10 +7,9 @@ import {
   buildAuthorizeUrl,
   exchangeCodeForTokens,
   fetchProfile,
-  refreshAccessToken,
 } from '../services/spotifyClient.js';
 import { codeChallengeFromVerifier, generateCodeVerifier, generateState } from '../utils/pkce.js';
-import { decrypt, encrypt } from '../utils/crypto.js';
+import { encrypt } from '../utils/crypto.js';
 import {
   PKCE_COOKIE,
   SESSION_COOKIE,
@@ -20,6 +19,7 @@ import {
 } from '../auth/session.js';
 import { env } from '../config/env.js';
 import { requireAuth } from '../middleware/requireAuth.js';
+import { getFreshAccessToken } from '../services/userTokens.js';
 
 export const authRouter = Router();
 
@@ -97,18 +97,9 @@ authRouter.get('/me', requireAuth, async (req, res) => {
 // Mints a short-lived Spotify access token for the Web Playback SDK. The
 // refresh token never leaves the server.
 authRouter.get('/token', requireAuth, async (req, res) => {
-  const user = await db.query.users.findFirst({ where: eq(users.id, req.userId!) });
-  if (!user) {
-    res.status(404).json({ error: 'User not found' });
-    return;
-  }
   try {
-    const refreshToken = decrypt(user.refreshTokenEnc);
-    const tokens = await refreshAccessToken(refreshToken);
-    if (tokens.refresh_token) {
-      await db.update(users).set({ refreshTokenEnc: encrypt(tokens.refresh_token) }).where(eq(users.id, user.id));
-    }
-    res.json({ accessToken: tokens.access_token, expiresIn: tokens.expires_in });
+    const result = await getFreshAccessToken(req.userId!);
+    res.json(result);
   } catch (err) {
     console.error('Failed to mint Spotify access token', err);
     res.status(502).json({ error: 'Failed to refresh Spotify token' });
